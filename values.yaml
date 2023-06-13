@@ -42,7 +42,7 @@
 # service for voting-app
   serviceVotingApp:
     #type: NodePort
-    type: ClusterIp
+    type: ClusterIP
     port: 80
     nodePort: 30004
 
