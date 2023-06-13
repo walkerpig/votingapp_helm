@@ -5,6 +5,7 @@ metadata:
   name: {{ include "votingapp_helm.fullname" . }}-voting-app
   labels:
     {{- include "votingapp_helm.labels" . | nindent 4 }}
+    name: {{ .Values.labelsAll }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}

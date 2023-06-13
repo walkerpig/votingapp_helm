@@ -1,15 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "votingapp_helm.fullname" . }}
+  name: {{ include "votingapp_helm.fullname" . }}-voting-app-service
   labels:
-    {{- include "votingapp_helm.labels" . | nindent 4 }}
+    {{- include "votingapp_helm.labels" . | nindent 4 }}-voting-app-service
+    name: {{ .Values.labelsAll }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.serviceVotingApp.type }}
+  {{- if eq .Values.serviceVotingApp.type "NodePort" }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: {{ .Values.serviceVotingApp.port }}
+      targetPort: {{ .Values.serviceVotingApp.port }}
       protocol: TCP
-      name: http
+      nodePort: {{ .Values.serviceVotingApp.nodePort }}
   selector:
-    {{- include "votingapp_helm.selectorLabels" . | nindent 4 }}
+    {{- include "votingapp_helm.labels" . | nindent 4 }}-voting-app-service
+    name: {{ .Values.labelsAll }}
+  {{- else }}
+  {{ end }}
