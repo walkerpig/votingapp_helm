@@ -5,7 +5,7 @@
 
   replicaCount: 1
   labelsAll: "demo-voting-app"
-  labelVotingApp: "Voting-app"
+  labelVotingApp: "voting-app"
 
 # image for voting-app
   imageVotingApp:
