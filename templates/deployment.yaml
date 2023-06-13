@@ -1,7 +1,8 @@
+#voting app
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "votingapp_helm.fullname" . }}
+  name: {{ include "votingapp_helm.fullname" . }}-voting-app
   labels:
     {{- include "votingapp_helm.labels" . | nindent 4 }}
 spec:
@@ -10,7 +11,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "votingapp_helm.selectorLabels" . | nindent 6 }}
+      {{- include "votingapp_helm.selectorLabels" . | nindent 6 }}-voting-app
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,44 +19,11 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "votingapp_helm.selectorLabels" . | nindent 8 }}
+        {{- include "votingapp_helm.selectorLabels" . | nindent 8 }}-voting-app
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "votingapp_helm.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ .Chart.Name }}-voting-app
+          image: "{{ .Values.imageVotingApp.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+            - containerPort: {{ .Values.serviceVotingApp.port }}
+---
