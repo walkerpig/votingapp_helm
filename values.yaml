@@ -41,7 +41,8 @@
     # runAsUser: 1000
 # service for voting-app
   serviceVotingApp:
-    type: NodePort
+    #type: NodePort
+    type: ClusterIp
     port: 80
     nodePort: 30004
 
