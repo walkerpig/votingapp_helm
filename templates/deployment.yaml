@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "votingapp_helm.fullname" . }}-voting-app
+  name: {{ .Values.labelVotingApp }}-deployment
   labels:
     name: {{ .Values.labelVotingApp }}-deploy
 spec:

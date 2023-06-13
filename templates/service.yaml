@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "votingapp_helm.fullname" . }}-voting-app-service
+  name: {{ .Values.labelVotingApp }}-service
   labels:
     name: {{ .Values.labelVotingApp }}-service
     app: {{ .Values.labelsAll }}
