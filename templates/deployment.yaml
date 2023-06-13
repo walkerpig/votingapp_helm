@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}-voting-app
-          image: "{{ .Values.imageVotingApp.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.imageVotingApp.repository }}:{{ .Values.imageVotingApp.tag | default .Chart.AppVersion }}"
           ports:
             - containerPort: {{ .Values.serviceVotingApp.port }}
 ---
