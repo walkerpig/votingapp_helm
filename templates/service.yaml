@@ -3,8 +3,8 @@ kind: Service
 metadata:
   name: {{ include "votingapp_helm.fullname" . }}-voting-app-service
   labels:
-    {{- include "votingapp_helm.labels" . | nindent 4 }}-voting-app-service
-    name: {{ .Values.labelsAll }}
+    name: {{ .Values.labelVotingApp }}-service
+    app: {{ .Values.labelsAll }}
 spec:
   type: {{ .Values.serviceVotingApp.type }}
   {{- if eq .Values.serviceVotingApp.type "NodePort" }}
@@ -14,7 +14,14 @@ spec:
       protocol: TCP
       nodePort: {{ .Values.serviceVotingApp.nodePort }}
   selector:
-    {{- include "votingapp_helm.labels" . | nindent 4 }}-voting-app-service
-    name: {{ .Values.labelsAll }}
+    name: {{ .Values.labelVotingApp }}-service
+    app: {{ .Values.labelsAll }}
   {{- else }}
+  ports:
+    - port: {{ .Values.serviceVotingApp.port }}
+      targetPort: {{ .Values.serviceVotingApp.port }}
+      protocol: TCP
+  selector:
+    name: {{ .Values.labelVotingApp }}-service
+    app: {{ .Values.labelsAll }}
   {{ end }}
