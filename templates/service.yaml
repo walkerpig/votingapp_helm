@@ -22,6 +22,6 @@ spec:
       targetPort: {{ .Values.serviceVotingApp.port }}
       protocol: TCP
   selector:
-    name: {{ .Values.labelVotingApp }}-service
+    name: {{ .Values.labelVotingApp }}-deploy
     app: {{ .Values.labelsAll }}
   {{ end }}
