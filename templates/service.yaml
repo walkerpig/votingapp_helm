@@ -55,3 +55,61 @@ spec:
     name: {{ .Values.labelResultApp }}-deploy
     app: {{ .Values.labelsAll }}
   {{ end }}
+---
+# service redis app
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nameServiceRedis }}
+  labels:
+    name: {{ .Values.labelRedisApp }}-service
+    app: {{ .Values.labelsAll }}
+spec:
+  type: {{ .Values.serviceRedisApp.type }}
+  {{- if eq .Values.serviceRedisApp.type "NodePort" }}
+  ports:
+    - port: {{ .Values.serviceRedisApp.port }}
+      targetPort: {{ .Values.serviceRedisApp.port }}
+      protocol: TCP
+      nodePort: {{ .Values.serviceRedisApp.nodePort }}
+  selector:
+    name: {{ .Values.labelRedisApp }}-deploy
+    app: {{ .Values.labelsAll }}
+  {{- else }}
+  ports:
+    - port: {{ .Values.serviceRedisApp.port }}
+      targetPort: {{ .Values.serviceRedisApp.port }}
+      protocol: TCP
+  selector:
+    name: {{ .Values.labelRedisApp }}-deploy
+    app: {{ .Values.labelsAll }}
+  {{ end }}
+---
+# service postgres app
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nameServicePostgres }}
+  labels:
+    name: {{ .Values.labelPostgresApp }}-service
+    app: {{ .Values.labelsAll }}
+spec:
+  type: {{ .Values.servicePostgresApp.type }}
+  {{- if eq .Values.servicePostgresApp.type "NodePort" }}
+  ports:
+    - port: {{ .Values.servicePostgresApp.port }}
+      targetPort: {{ .Values.servicePostgresApp.port }}
+      protocol: TCP
+      nodePort: {{ .Values.servicePostgresApp.nodePort }}
+  selector:
+    name: {{ .Values.labelPostgresApp }}-deploy
+    app: {{ .Values.labelsAll }}
+  {{- else }}
+  ports:
+    - port: {{ .Values.servicePostgresApp.port }}
+      targetPort: {{ .Values.servicePostgresApp.port }}
+      protocol: TCP
+  selector:
+    name: {{ .Values.labelPostgresApp }}-deploy
+    app: {{ .Values.labelsAll }}
+  {{ end }}

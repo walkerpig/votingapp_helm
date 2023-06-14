@@ -57,3 +57,96 @@ spec:
           image: "{{ .Values.imageResultApp.repository }}:{{ .Values.imageResultApp.tag | default .Chart.AppVersion }}"
           ports:
             - containerPort: {{ .Values.serviceResultApp.port }}
+---
+#worker app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.labelWorkerApp }}-deployment
+  labels:
+    name: {{ .Values.labelWorkerApp }}-deploy
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      name: {{ .Values.labelWorkerApp }}-deploy
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        name: {{ .Values.labelWorkerApp }}-deploy
+        app: {{ .Values.labelsAll }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-voting-app
+          image: "{{ .Values.imageWorkerApp.repository }}:{{ .Values.imageWorkerApp.tag | default .Chart.AppVersion }}"
+---
+#redis app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.labelRedisApp }}-deployment
+  labels:
+    name: {{ .Values.labelRedisApp }}-deploy
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      name: {{ .Values.labelRedisApp }}-deploy
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        name: {{ .Values.labelRedisApp }}-deploy
+        app: {{ .Values.labelsAll }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-voting-app
+          image: "{{ .Values.imageRedisApp.repository }}:{{ .Values.imageRedisApp.tag | default .Chart.AppVersion }}"
+          port: 
+            - containerPort: {{ .Values.serviceRedisApp.port }}
+---
+#postgres app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.labelRedisApp }}-deployment
+  labels:
+    name: {{ .Values.labelRedisApp }}-deploy
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      name: {{ .Values.labelRedisApp }}-deploy
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        name: {{ .Values.labelRedisApp }}-deploy
+        app: {{ .Values.labelsAll }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-voting-app
+          image: "{{ .Values.imageRedisApp.repository }}:{{ .Values.imageRedisApp.tag | default .Chart.AppVersion }}"
+          port: 
+            - containerPort: {{ .Values.serviceRedisApp.port }}
+    env:
+      {{- range .Values.envPostgres }}
+        - name: {{ .name }}
+          value: {{ .value }}
+      {{- end }}

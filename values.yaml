@@ -42,6 +42,60 @@
 
 #==================================
 
+# worker app zone
+  labelWorkerApp: "worker-app"
+
+# image for worker-app
+  imageWorkerApp:
+    repository: kodekloud/examplevotingapp_worker
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v1"
+
+#==================================
+
+# redis app zone
+  labelRedisApp: "redis-app"
+
+# image for redis-app
+  imageRedisApp:
+    repository: redis
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+  # service for redis-app
+  nameServiceRedis: "redis"
+  serviceRedisApp:
+    #type: NodePort
+    type: ClusterIP
+    port: 6379
+
+#==================================
+
+# postgres app zone
+  labelPostgresApp: "postgres-app"
+
+# image for postgres-app
+  imagePostgresApp:
+    repository: postgres
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "latest"
+  # service for postgres-app
+  nameServicePostgres: "db"
+  servicePostgresApp:
+    #type: NodePort
+    type: ClusterIP
+    port: 5432
+  envPostgres: 
+    - name: POSTGRES_USER
+      value: "postgres"
+    - name: POSTGRES_PASSWORD
+      value: "postgres"
+    - name: POSTGRES_HOST_AUTH_METHOD
+      value: trust
+
+#==================================
 
 
   imagePullSecrets: []
