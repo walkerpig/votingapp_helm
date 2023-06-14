@@ -145,8 +145,8 @@ spec:
           image: "{{ .Values.imagePostgresApp.repository }}:{{ .Values.imagePostgresApp.tag | default .Chart.AppVersion }}"
           ports: 
             - containerPort: {{ .Values.servicePostgresApp.port }}
-      env:
-        {{- range .Values.envPostgres }}
-          - name: {{ .name }}
-            value: {{ .value }}
-        {{- end }}
+          env:
+            {{- range .Values.envPostgres }}
+              - name: {{ .name }}
+                value: {{ .value }}
+            {{- end }}
