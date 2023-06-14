@@ -113,7 +113,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}-voting-app
           image: "{{ .Values.imageRedisApp.repository }}:{{ .Values.imageRedisApp.tag | default .Chart.AppVersion }}"
-          port: 
+          ports: 
             - containerPort: {{ .Values.serviceRedisApp.port }}
 ---
 #postgres app
@@ -143,7 +143,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}-voting-app
           image: "{{ .Values.imagePostgresApp.repository }}:{{ .Values.imagePostgresApp.tag | default .Chart.AppVersion }}"
-          port: 
+          ports: 
             - containerPort: {{ .Values.servicePostgresApp.port }}
     env:
       {{- range .Values.envPostgres }}
