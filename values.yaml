@@ -5,6 +5,8 @@
 
   replicaCount: 1
   labelsAll: "demo-voting-app"
+#==================================
+# voting app zone
   labelVotingApp: "voting-app"
 
 # image for voting-app
@@ -13,6 +15,34 @@
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v1"
+  # service for voting-app
+  serviceVotingApp:
+    #type: NodePort
+    type: NodePort
+    port: 80
+    nodePort: 30004
+
+#==================================
+
+# result app zone
+  labelResultApp: "result-app"
+
+# image for Result-app
+  imageResultApp:
+    repository: kodekloud/examplevotingapp_result
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v1"
+  # service for voting-app
+  serviceResultApp:
+    #type: NodePort
+    type: NodePort
+    port: 80
+    nodePort: 30005
+
+#==================================
+
+
 
   imagePullSecrets: []
   nameOverride: ""
@@ -39,12 +69,6 @@
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
-# service for voting-app
-  serviceVotingApp:
-    #type: NodePort
-    type: NodePort
-    port: 80
-    nodePort: 30004
 
   ingress:
     enabled: false

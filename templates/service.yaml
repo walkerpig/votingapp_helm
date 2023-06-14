@@ -1,3 +1,4 @@
+# service Voting-app
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,5 +24,34 @@ spec:
       protocol: TCP
   selector:
     name: {{ .Values.labelVotingApp }}-deploy
+    app: {{ .Values.labelsAll }}
+  {{ end }}
+---
+# service result app
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.labelResultApp }}-service
+  labels:
+    name: {{ .Values.labelResultApp }}-service
+    app: {{ .Values.labelsAll }}
+spec:
+  type: {{ .Values.serviceResultApp.type }}
+  {{- if eq .Values.serviceResultApp.type "NodePort" }}
+  ports:
+    - port: {{ .Values.serviceResultApp.port }}
+      targetPort: {{ .Values.serviceResultApp.port }}
+      protocol: TCP
+      nodePort: {{ .Values.serviceResultApp.nodePort }}
+  selector:
+    name: {{ .Values.labelResultApp }}-deploy
+    app: {{ .Values.labelsAll }}
+  {{- else }}
+  ports:
+    - port: {{ .Values.serviceResultApp.port }}
+      targetPort: {{ .Values.serviceResultApp.port }}
+      protocol: TCP
+  selector:
+    name: {{ .Values.labelResultApp }}-deploy
     app: {{ .Values.labelsAll }}
   {{ end }}

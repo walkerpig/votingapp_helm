@@ -28,3 +28,32 @@ spec:
           ports:
             - containerPort: {{ .Values.serviceVotingApp.port }}
 ---
+#result app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.labelResultApp }}-deployment
+  labels:
+    name: {{ .Values.labelResultApp }}-deploy
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      name: {{ .Values.labelResultApp }}-deploy
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        name: {{ .Values.labelResultApp }}-deploy
+        app: {{ .Values.labelsAll }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-voting-app
+          image: "{{ .Values.imageResultApp.repository }}:{{ .Values.imageResultApp.tag | default .Chart.AppVersion }}"
+          ports:
+            - containerPort: {{ .Values.serviceResultApp.port }}
