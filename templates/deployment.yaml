@@ -120,16 +120,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.labelRedisApp }}-deployment
+  name: {{ .Values.labelPostgresApp }}-deployment
   labels:
-    name: {{ .Values.labelRedisApp }}-deploy
+    name: {{ .Values.labelPostgresApp }}-deploy
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      name: {{ .Values.labelRedisApp }}-deploy
+      name: {{ .Values.labelPostgresApp }}-deploy
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -137,14 +137,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        name: {{ .Values.labelRedisApp }}-deploy
+        name: {{ .Values.labelPostgresApp }}-deploy
         app: {{ .Values.labelsAll }}
     spec:
       containers:
         - name: {{ .Chart.Name }}-voting-app
-          image: "{{ .Values.imageRedisApp.repository }}:{{ .Values.imageRedisApp.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.imagePostgresApp.repository }}:{{ .Values.imagePostgresApp.tag | default .Chart.AppVersion }}"
           port: 
-            - containerPort: {{ .Values.serviceRedisApp.port }}
+            - containerPort: {{ .Values.servicePostgresApp.port }}
     env:
       {{- range .Values.envPostgres }}
         - name: {{ .name }}
